@@ -3,14 +3,30 @@ import { useForm } from "react-hook-form";
 
 import { useNavigate } from "react-router-dom";
 import loginImage from "../assets/login.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { createLoging, signGoogle } from "../feature/auth/authSlice";
 const Login = () => {
   const { register, handleSubmit, reset } = useForm();
+  const dispatch = useDispatch()
+  const {user:{email}, }= useSelector((state)=>state.auth)
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = ({email, password}) => {
+dispatch(createLoging({email, password}))
+    console.log(email);
   };
 
+const handleGoogle =()=>{
+  dispatch(signGoogle())
+}
+
+
+  useEffect(()=>{
+    if(email){
+      navigate("/")
+      return
+    }
+  },[email, navigate])
   return (
     <div className='flex h-screen items-center'>
       <div className='w-1/2'>
@@ -56,6 +72,12 @@ const Login = () => {
                   </span>
                 </p>
               </div>
+              <button onClick={handleGoogle}
+                  type='button'
+                  className='font-bold text-white py-3 rounded-full bg-slate-400 w-full'
+                >
+                  Google With Login Now
+                </button>
             </div>
           </form>
         </div>

@@ -2,12 +2,16 @@ import React, { useEffect, useState } from "react";
 import loginImage from "../assets/login.svg";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { createAccount, signGoogle } from "../feature/auth/authSlice";
 const Signup = () => {
   const { handleSubmit, register, reset, control } = useForm();
   const password = useWatch({ control, name: "password" });
   const confirmPassword = useWatch({ control, name: "confirmPassword" });
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
+  const {user:{email}, }= useSelector((state)=>state.auth)
 
   useEffect(() => {
     if (
@@ -23,10 +27,20 @@ const Signup = () => {
     }
   }, [password, confirmPassword]);
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = ({email, password}) => {
+dispatch(createAccount({email, password}))
+    console.log(email);
   };
+useEffect(()=>{
+  if(email){
+    navigate("/")
+    return
+  }
+},[email, navigate])
 
+const handleGoogle =()=>{
+  dispatch(signGoogle())
+}
   return (
     <div className='flex h-screen items-center pt-14'>
       <div className='w-1/2'>
@@ -90,6 +104,12 @@ const Signup = () => {
                   </span>
                 </p>
               </div>
+              <button onClick={handleGoogle}
+                  type='button'
+                  className='font-bold text-white py-3 rounded-full bg-slate-400 w-full'
+                >
+                  Google With Login Now
+                </button>
             </div>
           </form>
         </div>

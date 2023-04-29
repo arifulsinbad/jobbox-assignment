@@ -1,7 +1,45 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
+import { useSelector } from "react-redux";
 const Sidebar = () => {
+  const {user:{email, role, employer}}=useSelector((state)=>state.auth)
+  const employerRoute = [
+    {
+      name: "Add Job",
+      path:"add-job"
+
+    }
+  ]
+  const candidateRoute = [
+    {
+      name: "Applied Job",
+      path:"applied-job"
+
+    }
+  ]
+  const candidateApply = [
+    {
+      name : "Candidate Message",
+      path: "candidate"
+  
+  }
+  ]
+  const employerAddJob = [
+    {
+      name : "employer",
+      path: "employer"
+  
+  }
+  ]
+  const employerMessage = [
+    {
+      name : "Employer Message",
+      path: "message"
+  
+  }
+  ]
+
   return (
     <div className='bg-primary/10 col-span-2 h-screen sticky top-0'>
       <ul className='flex flex-col gap-2 w-full h-full  p-3'>
@@ -12,14 +50,66 @@ const Sidebar = () => {
           </Link>
           <h1 className='text-xl'>Dashboard</h1>
         </div>
-        <li>
+        {role === "employer" &&
+          employerRoute.map(({name , path})=>(
+            <li>
           <Link
             className='hover:bg-primary hover:text-white bg-primary/10 transition-all w-full block py-2 px-3 rounded-full'
-            to='add-job'
+            to={path}
           >
-            Add Job
+            {name}
           </Link>
         </li>
+          ))
+        }
+        {role === "candidate" &&
+          candidateRoute.map(({name , path})=>(
+            <li>
+          <Link
+            className='hover:bg-primary hover:text-white bg-primary/10 transition-all w-full block py-2 px-3 rounded-full'
+            to={path}
+          >
+            {name}
+          </Link>
+        </li>
+          ))
+        }
+        {role === "employer" &&
+          employerAddJob.map(({name , path})=>(
+            <li>
+          <Link
+            className='hover:bg-primary hover:text-white bg-primary/10 transition-all w-full block py-2 px-3 rounded-full'
+            to={path}
+          >
+            {name}
+          </Link>
+        </li>
+          ))
+        }
+        {role === "employer" &&
+          candidateApply.map(({name , path})=>(
+            <li>
+          <Link
+            className='hover:bg-primary hover:text-white bg-primary/10 transition-all w-full block py-2 px-3 rounded-full'
+            to={path}
+          >
+            {name} 
+          </Link>
+        </li>
+          ))
+        }
+        {role === "candidate" &&
+          employerMessage.map(({name , path})=>(
+            <li>
+          <Link
+            className='hover:bg-primary hover:text-white bg-primary/10 transition-all w-full block py-2 px-3 rounded-full'
+            to={path}
+          >
+            {name}({employer.length})
+          </Link>
+        </li>
+          ))
+        }
       </ul>
     </div>
   );
